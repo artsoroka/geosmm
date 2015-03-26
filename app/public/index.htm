@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+	<meta charset="utf-8">
+	<script src="http://api-maps.yandex.ru/2.1/?load=package.full&amp;lang=ru-RU" type="text/javascript"></script>
 	<style type="text/css">
 		.map {
 			background: #A0BAF7;
@@ -61,25 +62,34 @@ ymaps.ready(function(){
 
 	myMap.events.add('actionend', function(e){
 		var coords = myMap.getCenter(); 
-		console.log('action end', coords); 
+		console.log('action end', coords);
+		var _myMap = myMap;  
 		getMedia({
 			lat: coords[0], 
 			long: coords[1]
 		}, function(err, data){
-			console.log('err', err, 'data', data); 
+			if( err ) return console.log(err); 
+			
+			if( ! data.response.items.length){
+				return console.log('no data found on the map'); 
+			} 
+			myMap.geoObjects.removeAll(); 
+		
+			data.response.items.forEach(function(item){
+				console.log('img: ', item.photo_75); 
+				
+				myMap.geoObjects.add(new ymaps.Placemark([item.lat, item.long], {
+				            balloonContent: '<img src="' + item.photo_604 +'">' 
+				        }, {
+				            preset: 'islands#circleDotIcon',
+				            iconColor: 'yellow'
+				        }))
+
+			})
+	 	
 		}); 
 	});
 	
-	myMap.geoObjects.add(
-	    new ymaps.Placemark(
-	        [ymaps.geolocation.latitude, ymaps.geolocation.longitude],
-	        {
-	            balloonContentHeader: ymaps.geolocation.country,
-	            balloonContent: ymaps.geolocation.city,
-	            balloonContentFooter: ymaps.geolocation.region
-	        }
-	    )
-	);
 });
     
 </script>
