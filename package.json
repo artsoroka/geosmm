@@ -1,0 +1,21 @@
+{
+  "name": "geosmm",
+  "version": "0.0.1",
+  "description": "Geospatial media stream from social networks",
+  "author": "Artem Soroka <art.soroka@yandex.ru>",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/artsoroka/geosmm"
+  },
+  "bugs": {
+    "url": "https://github.com/artsoroka/geosmm/issues/"
+  },
+  "dependencies": {
+    "express": "4.2.x", 
+    "request": "~2.54.0" 
+  }
+}
