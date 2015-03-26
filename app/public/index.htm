@@ -4,6 +4,7 @@
 	<script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 	<style type="text/css">
 		.map {
+			background: #A0BAF7;
 			display: block;
 			position: fixed;
 			width: 100%;
@@ -29,6 +30,25 @@
     <div id="map" class="map"></div>
 <script type="text/javascript">
 var myMap;
+var getMedia = function(query, cb){
+	var endpoint = '/api/photos'; 
+	var queryString = []; 
+	for(i in query){
+		queryString.push([i, query[i]].join('=')); 
+	}
+
+	var xhr = new XMLHttpRequest()
+	var url = [endpoint, queryString.join('&')].join('?'); 
+	xhr.open('GET', url);
+	xhr.onload = function(e){
+		if(xhr.status != 200){
+			return cb(JSON.parse(xhr.response).error, null); 		
+		} 
+		cb(false, JSON.parse(xhr.response)); 
+	} 
+	xhr.send(); 
+}; 
+
 ymaps.ready(function(){
 	var config = {
 		center: [59.93, 30.32],
@@ -40,7 +60,14 @@ ymaps.ready(function(){
 	myMap.container.fitToViewport();
 
 	myMap.events.add('actionend', function(e){
-		console.log('action end', myMap.getCenter()); 
+		var coords = myMap.getCenter(); 
+		console.log('action end', coords); 
+		getMedia({
+			lat: coords[0], 
+			long: coords[1]
+		}, function(err, data){
+			console.log('err', err, 'data', data); 
+		}); 
 	});
 	
 	myMap.geoObjects.add(
