@@ -7,6 +7,7 @@ var request = require('request');
 app.use(express.static(__dirname + '/public/')); 
 
 var mainPage = fs.readFileSync(__dirname + '/public/index.htm'); 
+var googleMaps = fs.readFileSync(__dirname + '/public/googlemaps.htm'); 
 
 api.get('/photos', function(req,res){
 	request
@@ -36,6 +37,9 @@ api.get('*', function(req,res){
 });
 
 app.use('/api', api); 
+app.get('/maps', function(req,res){
+  res.end(googleMaps); 
+}); 
 
 app.get('*', function(req,res){
 	res.end(mainPage);  
