@@ -9,6 +9,8 @@ app.use(express.static(__dirname + '/public/'));
 var mainPage = fs.readFileSync(__dirname + '/public/index.htm'); 
 var googleMaps = fs.readFileSync(__dirname + '/public/googlemaps.htm'); 
 
+app.enable('trust proxy'); 
+
 api.get('/photos', function(req,res){
 	request
 	  .get('https://api.vk.com/method/photos.search?v=5.29&count=100&lat=' + req.query.lat + '&long=' + req.query.long)
@@ -42,6 +44,7 @@ app.get('/maps', function(req,res){
 }); 
 
 app.get('*', function(req,res){
+    res.end(req.ip); 
 	res.end(mainPage);  
 }); 
 
