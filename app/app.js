@@ -44,8 +44,10 @@ app.get('/maps', function(req,res){
 }); 
 
 app.get('*', function(req,res){
-    res.end(req.ip); 
-	res.end(mainPage);  
+  request.get('http://freegeoip.net/json/' + req.ip, function(err,response,body){
+    console.log(body);  
+    res.end(mainPage); 
+  }); 
 }); 
 
 module.exports = app; 
