@@ -37,3 +37,62 @@ var getMedia = function(query, cb){
 	} 
 	xhr.send(); 
 }; 
+
+var showImagesOnMap = function(map){
+	return function(err,data){
+                
+		if( err ) return console.log('could not get data'); 
+
+		data.response.items.forEach(function(item){
+        	var myLatlng = new google.maps.LatLng(item.lat, item.long);
+                
+            var contentString = 
+            	'<div>'+
+                '<img src="' + item.photo_604 +'">' + 
+                '<a href="http://vk.com/id' + item.owner_id + '">Author</a>' + 
+                '</div>'
+        	
+            var createLink = function(user_id){
+            	var id = user_id.toString(); 
+            	var userType = ( id.split('')[0] == '-') ? 'club' : 'id'; 
+            	return 'http://vk.com/' + userType + id.replace('-','');             	
+            }
+
+
+
+        	contentString =  "<div><div style='float:left;'>" +
+                    '<a href="' + createLink(item.owner_id) + '">Author</a>' + 
+                    "New Delhi is the capital of the Republic of India, <br>" +
+                    "and the seat of executive, legislative, and judiciary <br>" +
+                    "branches of the Government of India. It also serves <br>" +
+                    "as the centre of the Government of the National <br>" +
+                    "Capital Territory of Delhi.<a href='http://en.wikipedia.org/wiki/New_Delhi' " +
+                    "style='text-decoration:none;color:#cccccc;font-size:10px;'> Wikipedia</a>" +
+                    "</div><div style='float:right; padding:5px;'><img src='" +
+                    item.photo_130 +"'>" +
+                    "</img></div></div>";
+
+
+        	var marker = new google.maps.Marker({
+            	position: myLatlng,
+                map: map,
+                icon: '/vk32.png',   
+                title: 'Hello World!'
+            }); 
+
+        	var infowindow = new google.maps.InfoWindow({
+            	content: contentString
+            });
+
+            google.maps.event.addListener(marker, 'click', function() {
+            	infowindow.open(map,marker);
+            });
+
+            google.maps.event.addListener(marker, 'mouseover', function() {
+            	console.log('about to click'); 
+            });
+
+        });
+
+    }
+}
