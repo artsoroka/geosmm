@@ -15,7 +15,8 @@
     "url": "https://github.com/artsoroka/geosmm/issues/"
   },
   "dependencies": {
-    "express": "4.2.x", 
-    "request": "~2.54.0" 
+    "express": "4.2.x",
+    "mysql": "^2.8.0",
+    "request": "~2.54.0"
   }
 }
